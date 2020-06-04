@@ -1,0 +1,10 @@
+about.txt
+
+All folders are individual projects pulled from:
+	https://flutter.dev/docs/codelabs
+
+Projects created in order of appearance on the page.
+
+
+I'm aware .gitignores and plugins are kept within project folders due to
+the initialized git repo being 2 dirs above. It's messy.

@@ -2,9 +2,15 @@ import '1_bicycles.dart';
 
 
 void bicycles_codelab() {
-  // Use 'const' for vars which aren't updated.
-  // Use 'final' for vars which aren't reassigned. 
-  // Use var otherwise.
+  // https://itnext.io/difference-between-const-and-final-in-dart-78c129d0c573
+  
+  // const vars are assigned at compile-time.
+  // final vars are assigned at run-time.
+  
+  // in Flutter, final vars are used since widgets get rebuilt - 
+  // effectively ensuring 1 assignment per instance over multiple instances.
+
+  // Use var if need multiple reassignment at run-time.
   const cadence = 13;
   final bike = Bicycle(1, 2);
   var bike_2 = Bicycle(2, 0);
