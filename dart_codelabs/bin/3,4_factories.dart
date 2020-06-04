@@ -49,4 +49,21 @@ void main(List<String> args) {
   final square_3 = Shape('square');
   print(circle_3.area);
   print(square_3.area);
+
+  // Test CircleMock.
+  final mock_circ = CircleMock();
+  print(mock_circ.area);
+}
+
+// Interface note: dart has no keyword 'interface' as every class defines one.
+// E.g. the following line throws a 'missing concrete implementations' error, as
+// CircleMock doesn't inherit the implementation of Circle; only its interface:
+
+// class CircleMock implements Circle {}
+
+class CircleMock implements Circle {
+  @override
+  num area;
+  @override
+  num radius;
 }
