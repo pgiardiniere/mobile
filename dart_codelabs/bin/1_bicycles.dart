@@ -19,7 +19,7 @@ class Bicycle {
   }
 
   @override
-  String toString() => 'Bicycle: $_speed mph';  
+  String toString() => 'Bicycle: $_speed mph';
 }
 
 void main() {
