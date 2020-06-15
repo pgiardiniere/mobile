@@ -1,53 +1,32 @@
+// https://stackoverflow.com/questions/60924384/creating-resizable-view-that-resizes-when-pinch-or-drag-from-corners-and-sides-i
 import 'package:flutter/material.dart';
 
-class ResizeWidget extends StatefulWidget {
-  @override
-  _ResizeWidgetState createState() => _ResizeWidgetState();
-}
-
-class _ResizeWidgetState extends State<ResizeWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.black,
-        body: Container(
-          // padding: EdgeInsets.only(top: 50),
-          child: ResizebleWidget(
-            child: Container(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                'Waao!! you can really dance.',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 18),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ResizebleWidget extends StatefulWidget {
-  ResizebleWidget({this.child});
+class ResizableWidget extends StatefulWidget {
+  ResizableWidget({this.child});
 
   final Widget child;
   @override
-  _ResizebleWidgetState createState() => _ResizebleWidgetState();
+  _ResizableWidgetState createState() => _ResizableWidgetState();
 }
 
-const ballDiameter = 10.0;
+const ballDiameter = 30.0;
 
-class _ResizebleWidgetState extends State<ResizebleWidget> {
-  double height = 100;
+class _ResizableWidgetState extends State<ResizableWidget> {
+  double height = 400;
   double width = 200;
-  bool isCorner = false;
 
   double top = 0;
   double left = 0;
+
+  void onDrag(double dx, double dy) {
+    var newHeight = height + dy;
+    var newWidth = width + dx;
+
+    setState(() {
+      height = newHeight > 0 ? newHeight : 0;
+      width = newWidth > 0 ? newWidth : 0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,24 +38,8 @@ class _ResizebleWidgetState extends State<ResizebleWidget> {
           child: Container(
             height: height,
             width: width,
-
-            decoration: BoxDecoration(
-              color: Colors.blueGrey,
-              border: Border.all(
-                width: 2,
-                color: Colors.white70,
-              ),
-              borderRadius: BorderRadius.circular(0.0),
-            ),
-
-            // need tp check if draggable is done from corner or sides
-            child: isCorner
-                ? FittedBox(
-                    child: widget.child,
-                  )
-                : Center(
-                    child: widget.child,
-                  ),
+            // color: Colors.red[100],
+            child: widget.child,
           ),
         ),
         // top left
@@ -90,14 +53,12 @@ class _ResizebleWidgetState extends State<ResizebleWidget> {
               var newWidth = width - 2 * mid;
 
               setState(() {
-                isCorner = true;
                 height = newHeight > 0 ? newHeight : 0;
                 width = newWidth > 0 ? newWidth : 0;
                 top = top + mid;
                 left = left + mid;
               });
             },
-            handlerWidget: HandlerWidget.VERTICAL,
           ),
         ),
         // top middle
@@ -109,13 +70,10 @@ class _ResizebleWidgetState extends State<ResizebleWidget> {
               var newHeight = height - dy;
 
               setState(() {
-                isCorner = false;
-
                 height = newHeight > 0 ? newHeight : 0;
                 top = top + dy;
               });
             },
-            handlerWidget: HandlerWidget.HORIZONTAL,
           ),
         ),
         // top right
@@ -130,14 +88,12 @@ class _ResizebleWidgetState extends State<ResizebleWidget> {
               var newWidth = width + 2 * mid;
 
               setState(() {
-                isCorner = true;
                 height = newHeight > 0 ? newHeight : 0;
                 width = newWidth > 0 ? newWidth : 0;
                 top = top - mid;
                 left = left - mid;
               });
             },
-            handlerWidget: HandlerWidget.VERTICAL,
           ),
         ),
         // center right
@@ -149,12 +105,9 @@ class _ResizebleWidgetState extends State<ResizebleWidget> {
               var newWidth = width + dx;
 
               setState(() {
-                isCorner = false;
-
                 width = newWidth > 0 ? newWidth : 0;
               });
             },
-            handlerWidget: HandlerWidget.HORIZONTAL,
           ),
         ),
         // bottom right
@@ -169,15 +122,12 @@ class _ResizebleWidgetState extends State<ResizebleWidget> {
               var newWidth = width + 2 * mid;
 
               setState(() {
-                isCorner = true;
-
                 height = newHeight > 0 ? newHeight : 0;
                 width = newWidth > 0 ? newWidth : 0;
                 top = top - mid;
                 left = left - mid;
               });
             },
-            handlerWidget: HandlerWidget.VERTICAL,
           ),
         ),
         // bottom center
@@ -189,12 +139,9 @@ class _ResizebleWidgetState extends State<ResizebleWidget> {
               var newHeight = height + dy;
 
               setState(() {
-                isCorner = false;
-
                 height = newHeight > 0 ? newHeight : 0;
               });
             },
-            handlerWidget: HandlerWidget.HORIZONTAL,
           ),
         ),
         // bottom left
@@ -209,15 +156,12 @@ class _ResizebleWidgetState extends State<ResizebleWidget> {
               var newWidth = width + 2 * mid;
 
               setState(() {
-                isCorner = true;
-
                 height = newHeight > 0 ? newHeight : 0;
                 width = newWidth > 0 ? newWidth : 0;
                 top = top - mid;
                 left = left - mid;
               });
             },
-            handlerWidget: HandlerWidget.VERTICAL,
           ),
         ),
         //left center
@@ -229,13 +173,10 @@ class _ResizebleWidgetState extends State<ResizebleWidget> {
               var newWidth = width - dx;
 
               setState(() {
-                isCorner = false;
-
                 width = newWidth > 0 ? newWidth : 0;
                 left = left + dx;
               });
             },
-            handlerWidget: HandlerWidget.HORIZONTAL,
           ),
         ),
         // center center
@@ -245,13 +186,10 @@ class _ResizebleWidgetState extends State<ResizebleWidget> {
           child: ManipulatingBall(
             onDrag: (dx, dy) {
               setState(() {
-                isCorner = false;
-
                 top = top + dy;
                 left = left + dx;
               });
             },
-            handlerWidget: HandlerWidget.VERTICAL,
           ),
         ),
       ],
@@ -260,16 +198,13 @@ class _ResizebleWidgetState extends State<ResizebleWidget> {
 }
 
 class ManipulatingBall extends StatefulWidget {
-  ManipulatingBall({Key key, this.onDrag, this.handlerWidget});
+  ManipulatingBall({Key key, this.onDrag});
 
   final Function onDrag;
-  final HandlerWidget handlerWidget;
 
   @override
   _ManipulatingBallState createState() => _ManipulatingBallState();
 }
-
-enum HandlerWidget { HORIZONTAL, VERTICAL }
 
 class _ManipulatingBallState extends State<ManipulatingBall> {
   double initX;
@@ -299,10 +234,8 @@ class _ManipulatingBallState extends State<ManipulatingBall> {
         width: ballDiameter,
         height: ballDiameter,
         decoration: BoxDecoration(
-          color: Colors.white,
-          shape: this.widget.handlerWidget == HandlerWidget.VERTICAL
-              ? BoxShape.circle
-              : BoxShape.rectangle,
+          color: Colors.blue.withOpacity(0.5),
+          shape: BoxShape.circle,
         ),
       ),
     );
