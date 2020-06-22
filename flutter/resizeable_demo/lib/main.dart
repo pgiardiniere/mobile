@@ -47,7 +47,7 @@ class _DemoState extends State<Demo> {
             child: FittedBox(
               fit: BoxFit.fill,
               child: Image.asset(
-                'assets/images/stencil_art_transparent.png',
+                'assets/images/transparent_reticle.png',
               ),
             ),
           ),
