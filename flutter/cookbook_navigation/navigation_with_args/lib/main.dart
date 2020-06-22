@@ -18,6 +18,12 @@ import 'package:flutter/material.dart';
 //      3b) ModalRoute.of unpacks args during destination widget build
 //    4) Register src/dest widgets in your MaterialApp home, routes, onGeneratedRoute sections.
 
+// Just on looking at this sample, my preference is the ModalRoute implementation.
+//    We avoid defining constructor/instance vars, and the route is responsible only for navigation.
+//    the destination widget stores the current buildcontext settings into a ScreenArguments typed variable.
+//    and accesses these exactly how you'd expect.
+//    Basically, it's more terse.
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
