@@ -1,17 +1,17 @@
 // https://stackoverflow.com/questions/60924384/creating-resizable-view-that-resizes-when-pinch-or-drag-from-corners-and-sides-i
 import 'package:flutter/material.dart';
 
-class ResizableWidget extends StatefulWidget {
-  ResizableWidget({this.child});
+class Resizable extends StatefulWidget {
+  Resizable({this.child});
 
   final Widget child;
   @override
-  _ResizableWidgetState createState() => _ResizableWidgetState();
+  _ResizableState createState() => _ResizableState();
 }
 
 const ballDiameter = 30.0;
 
-class _ResizableWidgetState extends State<ResizableWidget> {
+class _ResizableState extends State<Resizable> {
   double height = 400;
   double width = 200;
 
