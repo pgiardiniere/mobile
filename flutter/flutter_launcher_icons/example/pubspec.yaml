@@ -1,0 +1,42 @@
+name: example
+description: A new Flutter project to quickly test flutter_launcher_icons.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.3
+  flutter_launcher_icons: 
+    # path: ../..
+
+flutter_icons:
+  # #  image_path: "assets/images/icon-128x128.png"
+  # image_path_android: "assets/images/icon-710x599-android.png"
+  # image_path_ios: "assets/images/icon-710x599-ios.png"
+  # android: true # can specify file name here e.g. "ic_launcher"
+  # ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  # adaptive_icon_background: "assets/images/christmas-background.png" # only available for Android 8.0 devices and above
+  # adaptive_icon_foreground: "assets/images/ic_launcher.png" # only available for Android 8.0 devices and above
+  ios: true
+  android: true
+  image_path_ios: "assets/images/iOS_full_2.png"
+  # Android 7.1- uses nonadaptive icons
+  image_path_android: "assets/images/android_nonadaptive_2.png"
+  # Android 8.0+ uses adaptive icons
+  adaptive_icon_background: "assets/images/android_adaptive_background.png"
+  adaptive_icon_foreground: "assets/images/android_adaptive_foreground_sairaStencilOne.png"
+  
+  
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true

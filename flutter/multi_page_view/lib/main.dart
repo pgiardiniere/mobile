@@ -1,96 +1,22 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
+import './yay_medium.dart';
+import './ugh.dart';
 
 void main() {
   runApp(MaterialApp(
     title: 'Multi-page-view carousels',
     // home: Demo1(),
-    home: Demo2(),
+    home: DemoScreen(),
+    // home: AdvancedPageViewScreen(),
   ));
 }
 
-// No infinite scroll.
 class Demo1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // var controller = PageController(viewportFraction: 1/5);
-    final images = <Image>[];
-    images.add(Image.asset('assets/images/img_1.jpg'));
-    images.add(Image.asset('assets/images/img_2.jpg'));
-    images.add(Image.asset('assets/images/img_3.jpg'));
-
-    return PageView(
-      children: images,
-      controller: PageController(
-        viewportFraction: 1 / 3,
-        initialPage: 1,
-      ),
-    );
-  }
-}
-
-// Infinite scroll using a PageView.builder & initialPage hack.
-class Demo2 extends StatelessWidget {
-  // This method overlays a transparent image on top of a colored container.
-  _buildCarouselItem(String assetFilepath, double itemWidth) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(itemWidth / 2),
-      child: OverflowBox(
-        alignment: Alignment.center,
-        child: Container(
-          height: itemWidth,
-          width: itemWidth,
-          color: Color.fromRGBO(127, 0, 127, 0.5),
-          child: Image.asset('assets/images/transparent_reticle.png',
-              fit: BoxFit.cover),
-        ),
-      ),
-    );
-  }
-
-  // This method overlays a transparent colored container on top of an image.
-  // ** IF GET transparent photos, defer to the prior _buildCarouselItem method.
-  _buildCarouselItem2(String assetFilepath, double itemWidth) {
-    final radius = itemWidth / 2;
-    return Padding(
-      padding: EdgeInsets.all(itemWidth * 0.05),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: itemWidth,
-              width: itemWidth,
-              color: Color.fromARGB(128, 128, 128, 128),
-            ),
-            Positioned.fill(
-              child: Padding(
-                padding: EdgeInsets.all(radius / 3.14159),
-                child: Image.asset(
-                  assetFilepath,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final roundThumbnails = <Widget>[];
     final _itemWidth = MediaQuery.of(context).size.width / 5;
-
-    roundThumbnails.addAll([
-      _buildCarouselItem2('assets/images/img_artwork.png', _itemWidth),
-      _buildCarouselItem2('assets/images/img_bed.png', _itemWidth),
-      _buildCarouselItem2('assets/images/img_chair.png', _itemWidth),
-      _buildCarouselItem2('assets/images/img_couch.png', _itemWidth),
-      _buildCarouselItem2('assets/images/img_desk.png', _itemWidth),
-      _buildCarouselItem2('assets/images/img_lamp.png', _itemWidth),
-      _buildCarouselItem2('assets/images/img_toilet.png', _itemWidth),
-    ]);
+    final carousel = Carousel();
 
     return Scaffold(
       appBar: AppBar(title: Text('demo')),
@@ -99,27 +25,117 @@ class Demo2 extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         children: <Widget>[
           Image.asset('assets/images/img_3.jpg'),
-          SizedBox(
-            height: _itemWidth,
-            child: PageView(
-              controller: PageController(
-                viewportFraction: 1 / 5,
-                initialPage: 3,
+          Container(height: 20), // Push Carousel up by 20 px
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: carousel,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: RawMaterialButton(
+              shape: CircleBorder(
+                side: BorderSide(width: _itemWidth * .025, color: Colors.white),
               ),
-              children: roundThumbnails,
+              elevation: 2.0,
+              child: SizedBox(height: _itemWidth, width: _itemWidth),
+              onPressed: () {
+                // DoStuff
+              },
             ),
           ),
-          RawMaterialButton(
-            shape: CircleBorder(
-              side: BorderSide(width: _itemWidth * .025, color: Colors.white),
-            ),
-            elevation: 2.0,
-            child: SizedBox(height: _itemWidth, width: _itemWidth),
-            onPressed: () {
-              // DoStuff
-            },
-          ),
+          // Container(height: 20, width: 20, color: Colors.red,),
+          // Text(
+          //   carousel.currentIcon.objectText,
+          //   style: TextStyle(fontSize: 20, color: Colors.white),
+          // ),
         ],
+      ),
+    );
+  }
+}
+
+class Carousel extends StatefulWidget {
+  // NOTE: if you use this constructor, use 'widget.icons' in the state class.
+  // final icons;
+  // Carousel()
+  //     : this.icons = <CarouselIcon>[
+  //         CarouselIcon('assets/art_400.png', 'Art'),
+  //         CarouselIcon('assets/bed_500.png', 'Bed'),
+  //         CarouselIcon('assets/curtains_120.png', 'Curtains'),
+  //         CarouselIcon('assets/desk.png', 'Desk'),
+  //         CarouselIcon('assets/dresser_110.png', 'Dresser'),
+  //         CarouselIcon('assets/lamp_20r.png', 'Lamp'),
+  //         CarouselIcon('assets/nightstand_110.png', 'Nightstand'),
+  //         CarouselIcon('assets/seating_175.png', 'Seating'),
+  //         CarouselIcon('assets/sink.png', 'Sink'),
+  //         CarouselIcon('assets/toilet.png', 'Toilet'),
+  //         CarouselIcon('assets/other_350.png', 'Other'),
+  //       ];
+
+  @override
+  _CarouselState createState() => _CarouselState();
+}
+
+class _CarouselState extends State<Carousel> {
+  int currentPage = 5;
+
+  final icons = <CarouselIcon>[
+    CarouselIcon('assets/art_400.png', 'Art'),
+    CarouselIcon('assets/bed_500.png', 'Bed'),
+    CarouselIcon('assets/curtains_120.png', 'Curtains'),
+    CarouselIcon('assets/desk.png', 'Desk'),
+    CarouselIcon('assets/dresser_110.png', 'Dresser'),
+    CarouselIcon('assets/lamp_20r.png', 'Lamp'),
+    CarouselIcon('assets/nightstand_110.png', 'Nightstand'),
+    CarouselIcon('assets/seating_175.png', 'Seating'),
+    CarouselIcon('assets/sink.png', 'Sink'),
+    CarouselIcon('assets/toilet.png', 'Toilet'),
+    CarouselIcon('assets/other_350.png', 'Other'),
+  ];
+
+  CarouselIcon get currentIcon => icons[currentPage];
+
+  @override
+  Widget build(BuildContext context) {
+    final itemWidth = MediaQuery.of(context).size.width / 5;
+
+    return SizedBox(
+      height: itemWidth,
+      child: PageView(
+          // pageSnapping: false,  // set to false for custom scrolls
+          physics: BouncingScrollPhysics(),
+          controller: PageController(
+            viewportFraction: 1 / 5,
+            initialPage: currentPage,
+          ),
+          children: icons),
+    );
+  }
+}
+
+class CarouselIcon extends StatelessWidget {
+  final String assetFilepath;
+  final String _objectText;
+  CarouselIcon(this.assetFilepath, this._objectText);
+
+  String get objectText => _objectText;
+
+  @override
+  Widget build(BuildContext context) {
+    final itemWidth = MediaQuery.of(context).size.width / 5;
+    final radius = itemWidth / 2;
+
+    return Padding(
+      padding: EdgeInsets.all(itemWidth * 0.05), // Take 2x this off child cont.
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: Container(
+          height: itemWidth,
+          width: itemWidth,
+          color: Color.fromARGB(255, 255, 255, 255),
+          padding: EdgeInsets.all(itemWidth * 0.0375),
+          child: Image.asset(assetFilepath, fit: BoxFit.cover),
+        ),
       ),
     );
   }

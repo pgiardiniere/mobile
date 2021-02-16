@@ -1,0 +1,22 @@
+samples_from.txt
+
+https://stackoverflow.com/questions/46057353/controlling-state-from-outside-of-a-statefulwidget
+
+Even better, read this:
+
+https://medium.com/flutter-community/widget-state-buildcontext-inheritedwidget-898d671b7956
+
+Problem with article's 3rd approach (findAncestor...()) is it doesn't know when
+the state changes. It also requires a named state variable, which makes
+the stateless widget NOT immutable, and is not suggested for other reasons
+(i.e. it makes you add logic to createState(), which is frowned upon)
+
+Solution: Use a InheritedWidget.
+Drawback: InheritedWidget's are super low-level.
+
+Solution: 
+	Pub Dev 'provider' package acts as an extension of InheritedWidget
+	to "make them easier to use and more reusable".
+
+	The Flutter team even highly recommends using it, to the point that it's
+	even in their 'getting started' guides.
